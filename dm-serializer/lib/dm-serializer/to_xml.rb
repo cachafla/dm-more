@@ -22,7 +22,8 @@ module DataMapper
       xml = XMLSerializers::SERIALIZER
       doc ||= xml.new_document
       default_xml_element_name = lambda { Extlib::Inflection.underscore(self.class.name).tr("/", "-") }
-      root = xml.root_node(doc, opts[:element_name] || default_xml_element_name[])
+      attributes = opts[:attributes].nil? ? {} : opts[:attributes]
+      root = xml.root_node(doc, opts[:element_name] || default_xml_element_name[], attributes)
       properties_to_serialize(opts).each do |property|
         value = send(property.name)
         attrs = (property.type == String) ? {} : {'type' => property.type.to_s.downcase}

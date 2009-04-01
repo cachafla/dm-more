@@ -79,6 +79,14 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
       end
     end
 
+    describe ':attributes option for Resource' do
+      it "should include specified attributes to the root node" do
+        planet = Planet.new
+        xml = planet.to_xml(:attributes => { "my_attribute" => "the_earth" })
+        REXML::Document.new(xml).elements[1].attributes["my_attribute"].should == "the_earth"        
+      end
+    end
+
     describe ':collection_element_name for Collection' do
       before(:each) do
         query = DataMapper::Query.new(DataMapper::repository(:default), QuanTum::Cat)
